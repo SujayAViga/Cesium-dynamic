@@ -1,0 +1,206 @@
+[
+    {
+        "streamName": "BackCam (1)",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/BackTopCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 180.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            2283.0,
+            0.0,
+            660.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "RightCam (1)",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/RightTopCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 270.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            3020.0,
+            0.0,
+            -6.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "LeftCam (1)",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/LeftTopCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 90.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            1453.0,
+            0.0,
+            22.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "FrontCam (1)",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/FrontTopCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 0.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            2391.0,
+            51.0,
+            -626.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "LeftCam3",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/Left3.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 90.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            3424.0,
+            0.0,
+            90.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "BackCam3",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/Back3.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 180.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            4079.0,
+            0.0,
+            627.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "RightCam3",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/Right3.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 270.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            4742.0,
+            0.0,
+            -80.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "FrontCam3",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/Front3.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 0.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            4079.0,
+            51.0,
+            -720.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "LeftCam",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/LeftCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 90.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            -105.0,
+            0.0,
+            -71.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "FrontCam",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/FrontCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 0.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            546.0,
+            51.0,
+            -581.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "BackCam",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/BackCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 180.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            581.0,
+            0.0,
+            555.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "RightCam",
+        "streamLink": "https://3dstreams-dev.expocitydubai.com:5443/vigastudios/streams/RightCam.m3u8",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 270.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            1219.0,
+            0.0,
+            -125.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    }
+]
