@@ -4,12 +4,16 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader';
 import { Sphere,Vector3,Quaternion } from 'three';
 import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
+import { Sky } from 'three/addons/objects/Sky.js';
+
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.3, 1000_000_000_000_000 );
 // const camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setClearColor( 0x151c1f );
 document.body.appendChild( renderer.domElement );
 
 //Get VERTEX and FRAGMENT Shader
@@ -143,9 +147,39 @@ void main(){
     }
 }`
 
+    // sky
+    let sky, sun;
+	// Add Sky
+	sky = new Sky();
+	sky.scale.setScalar( 450000 );
+	// scene.add( sky );
 
+	sun = new THREE.Vector3();
+	const effectController = {
+		turbidity: 10,
+		rayleigh: 3,
+		mieCoefficient: 0.005,
+		mieDirectionalG: 0.7,
+		elevation: 2,
+		azimuth: 180,
+		exposure: renderer.toneMappingExposure
+	};
+	const uniforms = sky.material.uniforms;
+					uniforms[ 'turbidity' ].value = effectController.turbidity;
+					uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+					uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+					uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
 
+					const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+					const theta = THREE.MathUtils.degToRad( effectController.azimuth );
 
+					sun.setFromSphericalCoords( 1, phi, theta );
+
+					uniforms[ 'sunPosition' ].value.copy( sun );
+
+					renderer.toneMappingExposure = effectController.exposure;
+
+scene.add(sky)
 //FPS controller
 const FPScontrols = new PointerLockControls(camera,renderer.domElement);
 document.addEventListener('click',function(){FPScontrols.lock();})
@@ -246,15 +280,19 @@ function updateFPSControls(){
 
 //Set Ambient light to see model
 //Ambient Light
-const light = new THREE.AmbientLight( 0x404040 ,30);
-light.position.set(0,0,0);
+const light = new THREE.AmbientLight( 0x404040 ,1);
 scene.add(light);
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+
+directionalLight.position.x = 100
+directionalLight.position.y = 500
+scene.add( directionalLight );
 
 //Setup Cesium
 //Setup CESIUM ION
 const params = {
-
-	'ionAssetId': '2329341',
+    'errorTarget': 800,
+	'ionAssetId': '2336825',
 	'ionAccessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyZjk1OTU2My1mNDBhLTQzYzEtOTcxMS01MzNiOWIxMDZiYTMiLCJpZCI6MTY2MDkxLCJpYXQiOjE2OTQ1NDMyOTN9.rHxFqNMZ26EFHwHYUJ-xW0fDZtjamHXiM-4HR6YIHXY',
 	'reload': reinstantiateTiles,
 
@@ -308,7 +346,9 @@ function reinstantiateTiles() {
 		// it such that up is Y+ and center the model
 		const sphere = new Sphere();
 		tiles.getBoundingSphere( sphere );
-
+        tiles.lruCache.maxSize = 600;
+		tiles.lruCache.minSize = 400;
+		tiles.lruCache.unloadPercent = 1
 		const position = sphere.center.clone();
 		const distanceToEllipsoidCenter = position.length();
 
@@ -639,15 +679,16 @@ camera.position.z=200
 
 function animate() {
 	requestAnimationFrame( animate );
-  updateFPSControls();
+    updateFPSControls();
 
   if ( ! tiles ) return;
+    tiles.errorTarget = params.errorTarget;
 	tiles.setCamera( camera );
 	tiles.setResolutionFromRenderer( camera, renderer );
 	// update tiles
 	tiles.update();
 	renderer.render( scene, camera );
-  loadMeshOnFrustum();
+    loadMeshOnFrustum();
 }
 
 animate();
