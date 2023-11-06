@@ -288,17 +288,42 @@ directionalLight.position.x = 100
 directionalLight.position.y = 500
 scene.add( directionalLight );
 
+// Create a Video player geometry
+const videoPlayerGeo = new THREE.PlaneGeometry(100, 50);
+const videoMat = new THREE.MeshBasicMaterial({ map: new THREE.Texture() });
+const videoPlayer = new THREE.Mesh(videoPlayerGeo, videoMat);
+videoPlayer.position.y = 120
+scene.add(videoPlayer);
+
+// Load the video
+const video = document.createElement('video');
+video.src = './expoTrailer.mp4'; // Replace with the path to your WebM video
+video.load();
+document.addEventListener('keydown',e=>{
+	if(e.key=='e' || e.key=='E')
+    	video.play();
+	else if(e.key=='q' || e.key=="Q")
+		video.pause()
+})
+
+
+// Create a texture and update it with the video frames
+const texture = new THREE.VideoTexture(video);
+videoMat.map = texture;
+
+
 //Setup Cesium
 //Setup CESIUM ION
 const params = {
-    'errorTarget': 800,
-	'ionAssetId': '2336825',
+	'errorTarget': 1000,
+	'ionAssetId': ['2336825','2329932'],
 	'ionAccessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyZjk1OTU2My1mNDBhLTQzYzEtOTcxMS01MzNiOWIxMDZiYTMiLCJpZCI6MTY2MDkxLCJpYXQiOjE2OTQ1NDMyOTN9.rHxFqNMZ26EFHwHYUJ-xW0fDZtjamHXiM-4HR6YIHXY',
+	'displayBoxBounds': true,
 	'reload': reinstantiateTiles,
 
 };
 //-------------CESIUM ION tiles setup-----------------//
-let tiles;
+
 function rotationBetweenDirections( dir1, dir2 ) {
 
 	const rotation = new Quaternion();
@@ -313,62 +338,68 @@ function rotationBetweenDirections( dir1, dir2 ) {
 
 }
 
+let tiles = []; // Initialize an array to store multiple tiles
+
 function setupTiles() {
+    tiles.forEach(tile => {
+        tile.fetchOptions.mode = 'cors';
 
-	tiles.fetchOptions.mode = 'cors';
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://unpkg.com/three@0.153.0/examples/jsm/libs/draco/gltf/');
 
-	// Note the DRACO compression files need to be supplied via an explicit source.
-	// We use unpkg here but in practice should be provided by the application.
-	const dracoLoader = new DRACOLoader();
-	dracoLoader.setDecoderPath( 'https://unpkg.com/three@0.153.0/examples/jsm/libs/draco/gltf/' );
+        const loader = new GLTFLoader(tile.manager);
+        loader.setDRACOLoader(dracoLoader);
 
-	const loader = new GLTFLoader( tiles.manager );
-	loader.setDRACOLoader( dracoLoader );
-
-	tiles.manager.addHandler( /\.gltf$/, loader );
-	scene.add( tiles.group );
+        tile.manager.addHandler(/\.gltf$/, loader);
+        scene.add(tile.group);
+    });
 }
 
 function reinstantiateTiles() {
+    // Remove and dispose of all existing tiles
+    tiles.forEach(tile => {
+        scene.remove(tile.group);
+        tile.dispose();
+    });
 
-	if ( tiles ) {
+    // Clear the array
+    tiles.length = 0;
 
-		scene.remove( tiles.group );
-		tiles.dispose();
-		tiles = null;
+    // Add new tiles
+    for (let i = 0; i < params.ionAssetId.length; i++) {
+        const tile = new CesiumIonTilesRenderer(params.ionAssetId[i], params.ionAccessToken);
 
-	}
+        tile.onLoadTileSet = () => {
+            const sphere = new Sphere();
+            tile.getBoundingSphere(sphere);
 
-	tiles = new CesiumIonTilesRenderer( params.ionAssetId, params.ionAccessToken );
-	tiles.onLoadTileSet = () => {
+            tile.lruCache.maxSize = 1000;
+            tile.lruCache.minSize = 900;
+            tile.lruCache.unloadPercent = 1;
 
-		// because ion examples typically are positioned on the planet surface we can orient
-		// it such that up is Y+ and center the model
-		const sphere = new Sphere();
-		tiles.getBoundingSphere( sphere );
-        tiles.lruCache.maxSize = 600;
-		tiles.lruCache.minSize = 400;
-		tiles.lruCache.unloadPercent = 1
-		const position = sphere.center.clone();
-		const distanceToEllipsoidCenter = position.length();
+            const position = sphere.center.clone();
+            const distanceToEllipsoidCenter = position.length();
 
-		const surfaceDirection = position.normalize();
-		const up = new Vector3( 0, 1, 0 );
-		const rotationToNorthPole = rotationBetweenDirections( surfaceDirection, up );
+            const surfaceDirection = position.normalize();
+            const up = new Vector3(0, 1, 0);
+            const rotationToNorthPole = rotationBetweenDirections(surfaceDirection, up);
 
-		tiles.group.quaternion.x = rotationToNorthPole.x;
-		tiles.group.quaternion.y = rotationToNorthPole.y;
-		tiles.group.quaternion.z = rotationToNorthPole.z;
-		tiles.group.quaternion.w = rotationToNorthPole.w;
+            tile.group.quaternion.x = rotationToNorthPole.x;
+            tile.group.quaternion.y = rotationToNorthPole.y;
+            tile.group.quaternion.z = rotationToNorthPole.z;
+            tile.group.quaternion.w = rotationToNorthPole.w;
 
-		tiles.group.position.y = - distanceToEllipsoidCenter+90;
-		tiles.group.position.x = 254;
-		tiles.group.position.z = 536;
-	};
+            tile.group.position.x = 254;
+            tile.group.position.y = -distanceToEllipsoidCenter + 90;
+            tile.group.position.z = 536;
+        };
 
-	setupTiles();
+        tiles.push(tile); // Add the new tile to the array
+    }
 
+    setupTiles();
 }
+
 //-------------CESIUM ION tiles setup-----------------//
 
 //NEEEEWWWWW
@@ -421,7 +452,7 @@ function addMeshFromStream(video_element_id,near_plane_val,far_plane_val,fov,rot
   });
   shader_mat.needsUpdate=true;
 
-  const geometry=new THREE.PlaneGeometry(1,1,2000,1000);
+  const geometry=new THREE.PlaneGeometry(1,1,1000,500);
   geometry.scale(image_width/fov,image_height/fov,1);
 
   const instancedGeometry=new THREE.InstancedBufferGeometry();
@@ -677,16 +708,61 @@ camera.position.y=30
 camera.position.x=50
 camera.position.z=200
 
+// animated 3js object
+let npc,mixer,numAnimations
+function setupAnimatedObjects(){
+	const loader = new GLTFLoader();
+	loader.load( './remy.glb', function ( gltfModel ) {
+		npc = gltfModel.scene;
+		npc.scale.set(10,10,10,)
+		npc.position.set(50,-15,50)
+		console.log(npc.position);
+		scene.add(npc)
+		npc.traverse( function ( object ) {
+			if ( object.isMesh ) object.castShadow = true;
+		} );
+		const animations = gltfModel.animations;
+		mixer = new THREE.AnimationMixer( npc );
+
+		 // Add all animations to the mixer
+		 animations.forEach((clip) => {
+            mixer.clipAction(clip).play();
+        });
+
+		numAnimations = animations.length;
+		console.log(numAnimations);
+	})
+	
+}
+setupAnimatedObjects()
+let clock = new THREE.Clock();
+
 function animate() {
 	requestAnimationFrame( animate );
     updateFPSControls();
 
-  if ( ! tiles ) return;
-    tiles.errorTarget = params.errorTarget;
-	tiles.setCamera( camera );
-	tiles.setResolutionFromRenderer( camera, renderer );
-	// update tiles
-	tiles.update();
+    // character animation
+    if (mixer) {
+        mixer.update(clock.getDelta()); // Update the animations
+    }
+
+    // Update the video texture
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        texture.needsUpdate = true;
+    }
+
+    if (tiles.length === 0) return; // Check if there are any tiles in the array
+
+    tiles.forEach(tile => {
+        tile.errorTarget = params.errorTarget;
+        tile.setCamera(camera);
+
+        tile.setResolutionFromRenderer(camera, renderer);
+
+        // update tiles
+        tile.update();
+    });
+    videoPlayer.lookAt(camera.position)
 	renderer.render( scene, camera );
     loadMeshOnFrustum();
 }
