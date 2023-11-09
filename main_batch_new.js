@@ -316,7 +316,7 @@ videoMat.map = texture;
 //Setup CESIUM ION
 const params = {
 	'errorTarget': 1000,
-	'ionAssetId': ['2336825','2329932'],
+	'ionAssetId': ['2336825'],
 	'ionAccessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyZjk1OTU2My1mNDBhLTQzYzEtOTcxMS01MzNiOWIxMDZiYTMiLCJpZCI6MTY2MDkxLCJpYXQiOjE2OTQ1NDMyOTN9.rHxFqNMZ26EFHwHYUJ-xW0fDZtjamHXiM-4HR6YIHXY',
 	'displayBoxBounds': true,
 	'reload': reinstantiateTiles,
@@ -735,6 +735,40 @@ function setupAnimatedObjects(){
 	
 }
 setupAnimatedObjects()
+
+
+// Define an array of checkpoints
+const checkpoints = [
+    new THREE.Vector3(41, 0, 244),
+    new THREE.Vector3(-180, 0, 116),
+    new THREE.Vector3(-18, 0, -217),
+    new THREE.Vector3(202, 0, -32),
+    new THREE.Vector3(31, 0, 213)
+  ];
+let currentCheckpointIndex = 0;
+// Function to update the character's position and rotation
+function updateCharacterPosition() {
+    const targetCheckpoint = checkpoints[currentCheckpointIndex];
+
+    const direction = new THREE.Vector3().subVectors(targetCheckpoint, npc.position);
+    
+    direction.normalize();
+    
+    // Define a distance threshold for reaching a checkpoint
+    const distanceThreshold = 1;
+
+    // Move the character towards the checkpoint
+    npc.position.add(direction.multiplyScalar(0.5));
+  
+    // Rotate the character to look at the checkpoint
+    npc.lookAt(targetCheckpoint);
+  
+    // Check if the character has reached the checkpoint
+    if (npc.position.distanceTo(targetCheckpoint) < distanceThreshold) {
+        currentCheckpointIndex = (currentCheckpointIndex + 1) % checkpoints.length;
+      }
+  }
+  
 let clock = new THREE.Clock();
 
 function animate() {
@@ -762,6 +796,11 @@ function animate() {
         // update tiles
         tile.update();
     });
+    
+    if(npc){
+        updateCharacterPosition();
+    }
+    
     videoPlayer.lookAt(camera.position)
 	renderer.render( scene, camera );
     loadMeshOnFrustum();
