@@ -68,69 +68,69 @@ const jsonData=[
         "height": 1080.0
     },
     {
-        "streamName": "FrontTopCam",
-        "streamLink": "./Videos/FrontTragetTop.mp4",
+        "streamName": "LeftCamTop",
+        "streamLink": "./Videos/LeftTargetTop.mp4",
         "fov": 60.0,
         "near_plane": 0.3,
         "far_plane": 1000.0,
-        "rotateY": 180,
-        "rotateX": 0.0,
+        "rotateY": 131.878,
+        "rotateX": 2.727,
         "rotateZ": 0.0,
         "position": [
-            -350,
-            35,
-            362
+            -76.5,
+            36.2,
+            76.1
         ],
         "width": 1920.0,
         "height": 1080.0
     },
     {
-        "streamName": "BackTopCam",
+        "streamName": "BackCamTop",
         "streamLink": "./Videos/BackTargetTop.mp4",
         "fov": 60.0,
         "near_plane": 0.3,
         "far_plane": 1000.0,
-        "rotateY": 0.0,
+        "rotateY": 45.901,
         "rotateX": 0.0,
         "rotateZ": 0.0,
         "position": [
-            -353,
-            35,
-            104
+            -62.5,
+            31.9,
+            -63.7
         ],
         "width": 1920.0,
         "height": 1080.0
     },
     {
-        "streamName": "LeftTopCam",
-        "streamLink": "./Videos/LeftTargetTop.mp4",
-        "fov": 60.0,
-        "near_plane": 0.3,
-        "far_plane": 1500.0,
-        "rotateY": 90.0,
-        "rotateX": 0.0,
-        "rotateZ": 0.0,
-        "position": [
-            -486.7,
-            35,
-            214
-        ],
-        "width": 1920.0,
-        "height": 1080.0
-    },
-    {
-        "streamName": "RightTopCam",
+        "streamName": "RightCamTop",
         "streamLink": "./Videos/RightTargetTop.mp4",
         "fov": 60.0,
         "near_plane": 0.3,
         "far_plane": 1000.0,
-        "rotateY": -90.0,
+        "rotateY": 0.0,
+        "rotateX": 90.0,
+        "rotateZ": 0.0,
+        "position": [
+            8.8,
+            168.7,
+            3.9
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "FrontCamTop",
+        "streamLink": "./Videos/FrontTargetTop.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 113.992,
         "rotateX": 0.0,
         "rotateZ": 0.0,
         "position": [
-            -227,
-            35,
-            228
+            -109.3156,
+            31.7,
+            32.72234
         ],
         "width": 1920.0,
         "height": 1080.0

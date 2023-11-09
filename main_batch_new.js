@@ -113,8 +113,8 @@ varying vec2 vUV_depth;
 
 void make_kernel(inout vec4 n[9], sampler2D tex, vec2 coord)
 {
-	float w = 1.0 / 1000.;
-	float h = 1.0 / 500.;
+	float w = 1.0 / 1920.;
+	float h = 1.0 / 1080.;
 
 	n[0] = texture2D(tex, coord + vec2( -w, -h));
 	n[1] = texture2D(tex, coord + vec2(0.0, -h));
@@ -135,10 +135,10 @@ void main(){
 
         vec4 n[9];
         make_kernel( n, colorMap, vUV_depth );
-        vec4 sobel_edge_h = n[2] + (2.0*n[5]) + n[8] - (n[0] + (2.0*n[3]) + n[6]);
-        vec4 sobel_edge_v = n[0] + (2.0*n[1]) + n[2] - (n[6] + (2.0*n[7]) + n[8]);
+        vec4 sobel_edge_h = n[2] + (10.0*n[5]) + n[8] - (n[0] + (10.0*n[3]) + n[6]);
+        vec4 sobel_edge_v = n[0] + (10.0*n[1]) + n[2] - (n[6] + (10.0*n[7]) + n[8]);
         vec4 sobel = sqrt((sobel_edge_h * sobel_edge_h) + (sobel_edge_v * sobel_edge_v));
-        if(sobel.r > 0.2)
+        if(sobel.r > 0.0)
         {
             discard;
         }
@@ -316,7 +316,7 @@ videoMat.map = texture;
 //Setup CESIUM ION
 const params = {
 	'errorTarget': 1000,
-	'ionAssetId': ['2336825','2329932'],
+	'ionAssetId': ['2336825'],
 	'ionAccessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyZjk1OTU2My1mNDBhLTQzYzEtOTcxMS01MzNiOWIxMDZiYTMiLCJpZCI6MTY2MDkxLCJpYXQiOjE2OTQ1NDMyOTN9.rHxFqNMZ26EFHwHYUJ-xW0fDZtjamHXiM-4HR6YIHXY',
 	'displayBoxBounds': true,
 	'reload': reinstantiateTiles,
@@ -521,7 +521,7 @@ function meshPositionData(near_plane_val,far_plane_val,fov,width,height,rotateY,
   render_width.push(width);
   render_height.push(height);
 
-  scaling_factor.push(1.0);
+  scaling_factor.push(3.0);
 }
 
 function imageCropData(image_width,image_height,atlas_width,atlas_height,posX,posY){
@@ -557,142 +557,142 @@ function loadMeshOnFrustum(){
 }
 
 const jsonData=[
-  {
-      "streamName": "FrontCam",
-      "streamLink": "./Videos/FrontTarget.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": 0.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          17.8,
-          36.6,
-          -125
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "BackCam",
-      "streamLink": "./Videos/BackTarget.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": -180.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          1.9,
-          40.4,
-          142.3
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "LeftCam",
-      "streamLink": "./Videos/LeftTarget.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": 90.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          -100.5,
-          29.2,
-          0.0
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "RightCam",
-      "streamLink": "./Videos/RightTarget.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": -90,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          125.5,
-          41.1,
-          0.0
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "FrontTopCam",
-      "streamLink": "./Videos/FrontTragetTop.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": 180,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          -350,
-          35,
-          362
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "BackTopCam",
-      "streamLink": "./Videos/BackTargetTop.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": 0.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          -353,
-          35,
-          104
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "LeftTopCam",
-      "streamLink": "./Videos/LeftTargetTop.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1500.0,
-      "rotateY": 90.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          -486.7,
-          35,
-          214
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  },
-  {
-      "streamName": "RightTopCam",
-      "streamLink": "./Videos/RightTargetTop.mp4",
-      "fov": 60.0,
-      "near_plane": 0.3,
-      "far_plane": 1000.0,
-      "rotateY": -90.0,
-      "rotateX": 0.0,
-      "rotateZ": 0.0,
-      "position": [
-          -227,
-          35,
-          228
-      ],
-      "width": 1920.0,
-      "height": 1080.0
-  }
+    {
+        "streamName": "FrontCam",
+        "streamLink": "./Videos/FrontTarget.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 0.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            17.8,
+            36.6,
+            -125
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "BackCam",
+        "streamLink": "./Videos/BackTarget.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": -180.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            1.9,
+            40.4,
+            142.3
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "LeftCam",
+        "streamLink": "./Videos/LeftTarget.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 90.0,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            -100.5,
+            29.2,
+            0.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "RightCam",
+        "streamLink": "./Videos/RightTarget.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": -90,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            125.5,
+            41.1,
+            0.0
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "LeftCamTop",
+        "streamLink": "./Videos/LeftTargetTop.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 131.878,
+        "rotateX": 2.727,
+        "rotateZ": 0.0,
+        "position": [
+            -76.5,
+            36.2,
+            76.1
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "BackCamTop",
+        "streamLink": "./Videos/BackTargetTop.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 45.901,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            -62.5,
+            31.9,
+            -63.7
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "RightCamTop",
+        "streamLink": "./Videos/RightTargetTop.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 0.0,
+        "rotateX": 90.0,
+        "rotateZ": 0.0,
+        "position": [
+            8.8,
+            168.7,
+            3.9
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    },
+    {
+        "streamName": "FrontCamTop",
+        "streamLink": "./Videos/FrontTargetTop.mp4",
+        "fov": 60.0,
+        "near_plane": 0.3,
+        "far_plane": 1000.0,
+        "rotateY": 113.992,
+        "rotateX": 0.0,
+        "rotateZ": 0.0,
+        "position": [
+            -109.3156,
+            31.7,
+            32.72234
+        ],
+        "width": 1920.0,
+        "height": 1080.0
+    }
 ];
 
 const data=JSON.parse(JSON.stringify(jsonData));
@@ -735,6 +735,40 @@ function setupAnimatedObjects(){
 	
 }
 setupAnimatedObjects()
+
+
+// Define an array of checkpoints
+const checkpoints = [
+    new THREE.Vector3(41, 0, 244),
+    new THREE.Vector3(-180, 0, 116),
+    new THREE.Vector3(-18, 0, -217),
+    new THREE.Vector3(202, 0, -32),
+    new THREE.Vector3(31, 0, 213)
+  ];
+let currentCheckpointIndex = 0;
+// Function to update the character's position and rotation
+function updateCharacterPosition() {
+    const targetCheckpoint = checkpoints[currentCheckpointIndex];
+
+    const direction = new THREE.Vector3().subVectors(targetCheckpoint, npc.position);
+    
+    direction.normalize();
+    
+    // Define a distance threshold for reaching a checkpoint
+    const distanceThreshold = 1;
+
+    // Move the character towards the checkpoint
+    npc.position.add(direction.multiplyScalar(0.5));
+  
+    // Rotate the character to look at the checkpoint
+    npc.lookAt(targetCheckpoint);
+  
+    // Check if the character has reached the checkpoint
+    if (npc.position.distanceTo(targetCheckpoint) < distanceThreshold) {
+        currentCheckpointIndex = (currentCheckpointIndex + 1) % checkpoints.length;
+      }
+  }
+  
 let clock = new THREE.Clock();
 
 function animate() {
@@ -762,6 +796,11 @@ function animate() {
         // update tiles
         tile.update();
     });
+    
+    if(npc){
+        updateCharacterPosition();
+    }
+    
     videoPlayer.lookAt(camera.position)
 	renderer.render( scene, camera );
     loadMeshOnFrustum();

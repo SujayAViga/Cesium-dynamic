@@ -5,8 +5,8 @@ varying vec2 vUV_depth;
 
 void make_kernel(inout vec4 n[9], sampler2D tex, vec2 coord)
 {
-	float w = 1.0 / 1000.;
-	float h = 1.0 / 500.;
+	float w = 1.0 / 1920.;
+	float h = 1.0 / 1080.;
 
 	n[0] = texture2D(tex, coord + vec2( -w, -h));
 	n[1] = texture2D(tex, coord + vec2(0.0, -h));
@@ -21,16 +21,17 @@ void make_kernel(inout vec4 n[9], sampler2D tex, vec2 coord)
 
 void main(){
     if(texture2D(colorMap,vUV_depth).r < 0.01){
-        discard;
+        //discard;
+        gl_FragColor=vec4(1.0,0.0,0.0,1.0);
     }
     else{
 
         vec4 n[9];
         make_kernel( n, colorMap, vUV_depth );
-        vec4 sobel_edge_h = n[2] + (2.0*n[5]) + n[8] - (n[0] + (2.0*n[3]) + n[6]);
-        vec4 sobel_edge_v = n[0] + (2.0*n[1]) + n[2] - (n[6] + (2.0*n[7]) + n[8]);
+        vec4 sobel_edge_v = n[2] + (2.0*n[5]) + n[8] - (n[0] + (2.0*n[3]) + n[6]);
+        vec4 sobel_edge_h = n[0] + (2.0*n[1]) + n[2] - (n[6] + (2.0*n[7]) + n[8]);
         vec4 sobel = sqrt((sobel_edge_h * sobel_edge_h) + (sobel_edge_v * sobel_edge_v));
-        if(sobel.r > 0.2)
+        if(sobel.r > 0.0)
         {
             discard;
         }
